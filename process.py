@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # process.py
-# This script consists of all basic processes.
+# This script consists of all core functions.
 # PixPack v2 - Organize your photos safely...
 # Author: Orhan Odabasi (0rh.odabasi[at]gmail.com)
 
@@ -12,96 +12,80 @@ from PIL import Image
 import re
 from collections import Counter
 
-
+# NOTE: edited
 def sysTransVar():
-    
     # check system language
+    # If system language is English, returns 0
+    # If Turkish, returns 1
     sys_lang = locale.getlocale()
-    if sys_lang[0] == 'en_EN' or sys_lang[0] == 'en_GB' :
+    if sys_lang[0] == 'en_EN' or sys_lang[0] == 'en_GB':
         return 0
     elif sys_lang[0] == 'tr_TR' or sys_lang[0] is None:
         return 1
+    else:
+        return 0
 
-def saveReport(photo_datas, target_path):
+# NOTE: edited
+def scanDir(path):
+    # scans the path and collects media data for copy process
+    while os.path.exists(path) and os.path.isdir(path):
+        photos_dataset, totalsize, folder_count, videos_dataset = listphotos(path)
+        p_count = len(photos_dataset)
+        p_size = "{:.2f} MB".format(float(totalsize/1000000))
+        return p_count, p_size, folder_count, photos_dataset, videos_dataset
 
-    # save these infos to a csv file
-    report_dest = os.path.join(target_path, "photo_list.csv")
-    with open(report_dest, "w") as f:
+# NOTE: edited
+def saveReport(photo_datas, video_datas, target_path):
+    # saves summary data to a csv file
+    report_dest_p = os.path.join(target_path, "photo_list.csv")
+    report_dest_v = os.path.join(target_path, "video_list.csv")
+    with open(report_dest_p, "w") as f:
         w = csv.writer(f, delimiter=",")
         w.writerows(photo_datas)
         f.close()
+    with open(report_dest_v, "w") as f:
+        w = csv.writer(f, delimiter=",")
+        w.writerows(video_datas)
+        f.close()
 
-def scanDir(path):
-
-    # scan process
-    while os.path.exists(path) and os.path.isdir(path):
-        photos_dataset, totalsize, folder_count = listphotos(path)
-        p_count = len(photos_dataset)
-        p_size = "{:.2f} MB".format(float(totalsize/1000000))
-        return p_count, p_size, folder_count, photos_dataset
-
+# NOTE: edited
 def listphotos(path):
     # Listing all files in target directory
     photos_dataset = []
-
+    videos_dataset = []
     for root, dirs, files in os.walk(path):
-
         for name in files:
-            data_list = []
-            # picking only jpg and png files
+            p_data_list = []
+            v_data_list = []
+            # filename name [0]
+            file_name = name
+            # file path [1]
+            file_path = os.path.join(root, file_name)
+            # file size [2]
+            file_size = os.path.getsize(file_path)
+
+            try:
+                date_taken = Image.open(file_path)._getexif()[36867]
+                # year/month/day format required
+                ymd_format = re.match("(\d{4}):(\d{2}):(\d{2})", date_taken)
+                year = ymd_format.group(1)
+                month = ymd_format.group(2)
+                day = ymd_format.group(3)
+                # date info will be our new folder name
+                date_info = "{0}-{1}".format(year, month)
+            except:
+                date_taken = "NOT_FOUND"
+                year = "NOT_FOUND"
+                month = "NOT_FOUND"
+                date_info = "NOT_FOUND"
+                day = "NOT_FOUND"
+
             if name.lower().endswith((".jpeg", ".jpg", ".png")):
-
-                # photo's name [0]
-                file_name = name
-                data_list.append(file_name)
-
-                # photo's path [1]
-                file_path = os.path.join(root, file_name)
-                data_list.append(file_path)
-
-                # photo's size [2]
-                file_size = os.path.getsize(file_path)
-                data_list.append(file_size)
-
-                # finding out when it was taken (exifcode=36867)
-                # http://www.awaresystems.be/imaging/tiff/tifftags/privateifd/exif/datetimeoriginal.html
-                try:
-
-                    date_taken = Image.open(file_path)._getexif()[36867]
-
-                    # year/month/day format required
-                    ymd_format = re.match("(\d{4}):(\d{2}):(\d{2})", date_taken)
-                    year = ymd_format.group(1)
-                    month = ymd_format.group(2)
-                    day = ymd_format.group(3)
-
-                    # date info will be our new folder name
-                    date_info = "{0}-{1}".format(year, month)
-                except:
-
-                    date_taken = "NOT_FOUND"
-                    year = "NOT_FOUND"
-                    month = "NOT_FOUND"
-                    date_info = "NOT_FOUND"
-                    day = "NOT_FOUND"
-
-                # photo's full date info [3]
-                data_list.append(date_taken)
-
-                # photo's year [4]
-                data_list.append(year)
-
-                # photo's month [5]
-                data_list.append(month)
-
-                #photo's day [6]
-                data_list.append(day)
-
-                # where it will be moved/new folder name [7]
-                data_list.append(date_info)
-                photos_dataset.append(data_list)
-
-
+                p_data_list.extend([file_name, file_path, file_size, date_taken, year, month, day, date_info])
+                photos_dataset.append(p_data_list)
+            elif name.lower().endswith((".mov", ".mkv", ".mp4", ".3gp", ".wmv")):
+                v_data_list.extend([file_name, file_path, file_size, date_taken, year, month, day, date_info])
+                videos_dataset.append(v_data_list)
 
     # total size of photos archive (only jpeg and png files)
     totalsize = 0
@@ -114,8 +98,7 @@ def listphotos(path):
         dirs.append(x[7])
 
     foldercount = len(Counter(dirs).most_common())
-
-    return photos_dataset, totalsize, foldercount
+    return photos_dataset, totalsize, foldercount, videos_dataset
 
 """
 def bttf(destination, photodata, copy_suffix):

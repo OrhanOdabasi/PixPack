@@ -201,22 +201,21 @@ class Ui_MainWindow(object):
         self.csvCheckBox.setEnabled(False)
         self.scanButton.setEnabled(False)
 
+    # NOTE: edited
     def thrforScan(self,p):
-
         # Thread process for scanning
         self.bttnDisable()
         self.procOut(self.trans["proc_scan"][self.lang], 2)
-
         try:
-            global photo_dataset
-            p_count, p_size, folder_count, photo_dataset = scanDir(p)
+            global photo_dataset, video_dataset
+            p_count, p_size, folder_count, photo_dataset, video_dataset = scanDir(p)
             self.pcountOutLabel.setText(str(p_count))
             self.psizeOutLabel.setText(str(p_size))
             self.fcountOutLabel.setText(str(folder_count))
-            self.progressBar.setMaximum(len(photo_dataset))
+            self.progressBar.setMaximum(len(photo_dataset)+len(video_dataset))
             self.progressBar.setFormat('%v/{}'.format(self.progressBar.maximum()))
             if self.csvCheckBox.checkState():
-                saveReport(photo_dataset, p)
+                saveReport(photo_dataset, video_dataset, p)
                 self.procOut(self.trans["proc_saveTrue"][self.lang], 1)
             else:
                 self.procOut(self.trans["proc_saveFalse"][self.lang], 1)
@@ -225,13 +224,13 @@ class Ui_MainWindow(object):
             print(e)
         self.bttnEnable()
 
-    def thrforCopy(self, target_path, photodata, copy_suffix):
-
+    # NOTE: edited
+    def thrforCopy(self, target_path, photodata, videodata, copy_suffix):
         # Thread process for copying
         self.bttnDisable()
         self.procOut(self.trans["process"][self.lang], 2)
         try:
-            self.bttf(target_path, photodata, copy_suffix)
+            self.bttf(target_path, photodata, videodata, copy_suffix)
             self.procOut(self.trans["proc_ok"][self.lang], 1)
         except:
             self.procOut(self.trans["proc_fail"][self.lang], 0)
@@ -244,10 +243,10 @@ class Ui_MainWindow(object):
         t1 = threading.Thread(target=self.thrforScan, args=(path,))
         t1.start()
 
+    # NOTE: edited
     def copyProcess(self):
-
         # copy button connection
-        if not photo_dataset:
+        if not photo_dataset and not video_dataset:
             self.procOut(self.trans["proc_NULL"][self.lang], 0)
             return 0
         else:
@@ -258,16 +257,35 @@ class Ui_MainWindow(object):
                 target_path = os.path.join(self.srcPath.text(), target_path)
 
         copy_suffix = self.trans["copy"][self.lang]
-        t2 = threading.Thread(target=self.thrforCopy, args=(target_path, photo_dataset, copy_suffix))
+        t2 = threading.Thread(target=self.thrforCopy, args=(target_path, photo_dataset, video_dataset, copy_suffix))
         t2.start()
 
-    def bttf(self, destination, photodata, copy_suffix):
 
+    def bttf(self, destination, photodata, videodata, copy_suffix):
         # copy process
         progress_status = 0
         for x in photodata:
-
             dest_dir = os.path.join(destination, str(x[7]))
+            if os.path.exists(dest_dir):
+                dest_file = os.path.join(dest_dir, x[0])
+                i = 1
+                while os.path.exists(dest_file):
+                    dest_file = os.path.join(dest_dir, x[0])
+                    base_name = os.path.basename(dest_file)
+                    name, ext = os.path.splitext(base_name)
+                    name = name + "_" + str(copy_suffix) + str(i)
+                    base_name = name + ext
+                    dest_file = os.path.join(os.path.dirname(dest_file), base_name)
+                    i += 1
+                shutil.copy2(x[1], dest_file)
+            else:
+                os.makedirs(dest_dir)
+                shutil.copy2(x[1], dest_dir)
+            progress_status += 1
+            self.progressBar.setValue(progress_status)
+
+        for x in videodata:
+            dest_dir = os.path.join(destination, "VIDEOS")
             if os.path.exists(dest_dir):
                 dest_file = os.path.join(dest_dir, x[0])
                 i = 1
