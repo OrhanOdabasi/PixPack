@@ -191,6 +191,7 @@ class Ui_MainWindow(object):
         self.srcPath.setEnabled(True)
         self.csvCheckBox.setEnabled(True)
         self.scanButton.setEnabled(True)
+        self.startButton.setEnabled(True)
 
     def bttnDisable(self):
 
@@ -200,6 +201,7 @@ class Ui_MainWindow(object):
         self.srcPath.setEnabled(False)
         self.csvCheckBox.setEnabled(False)
         self.scanButton.setEnabled(False)
+        self.startButton.setEnabled(False)
 
     # NOTE: edited
     def thrforScan(self,p):
@@ -270,7 +272,7 @@ class Ui_MainWindow(object):
                 dest_file = os.path.join(dest_dir, x[0])
                 i = 1
                 while os.path.exists(dest_file):
-                    dest_file = os.path.join(dest_dir, x[0])
+                    dest_file = os.path.join(dest_dir, x[0]) # NOTE: This part may be useless
                     base_name = os.path.basename(dest_file)
                     name, ext = os.path.splitext(base_name)
                     name = name + "_" + str(copy_suffix) + str(i)
@@ -285,12 +287,12 @@ class Ui_MainWindow(object):
             self.progressBar.setValue(progress_status)
 
         for x in videodata:
-            dest_dir = os.path.join(destination, "VIDEOS")
+            dest_dir = os.path.join(destination, "VIDEO")
             if os.path.exists(dest_dir):
                 dest_file = os.path.join(dest_dir, x[0])
                 i = 1
                 while os.path.exists(dest_file):
-                    dest_file = os.path.join(dest_dir, x[0])
+                    dest_file = os.path.join(dest_dir, x[0]) # NOTE: This part may be useless
                     base_name = os.path.basename(dest_file)
                     name, ext = os.path.splitext(base_name)
                     name = name + "_" + str(copy_suffix) + str(i)

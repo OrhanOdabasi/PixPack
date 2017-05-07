@@ -75,15 +75,16 @@ def listphotos(path):
                 date_info = "{0}-{1}".format(year, month)
             except:
                 date_taken = "NOT_FOUND"
+                day = "NOT_FOUND"
                 year = "NOT_FOUND"
                 month = "NOT_FOUND"
+                # destination folder name [7]
                 date_info = "NOT_FOUND"
-                day = "NOT_FOUND"
 
             if name.lower().endswith((".jpeg", ".jpg", ".png")):
                 p_data_list.extend([file_name, file_path, file_size, date_taken, year, month, day, date_info])
                 photos_dataset.append(p_data_list)
-            elif name.lower().endswith((".mov", ".mkv", ".mp4", ".3gp", ".wmv")):
+            elif name.lower().endswith((".mov", ".mkv", ".mp4", ".3gp", ".wmv", ".avi")):
                 v_data_list.extend([file_name, file_path, file_size, date_taken, year, month, day, date_info])
                 videos_dataset.append(v_data_list)
 
@@ -99,26 +100,3 @@ def listphotos(path):
 
     foldercount = len(Counter(dirs).most_common())
     return photos_dataset, totalsize, foldercount, videos_dataset
-
-"""
-def bttf(destination, photodata, copy_suffix):
-    # copy process
-    for x in photodata:
-
-        dest_dir = os.path.join(destination, str(x[7]))
-        if os.path.exists(dest_dir):
-            dest_file = os.path.join(dest_dir, x[0])
-            i = 1
-            while os.path.exists(dest_file):
-                dest_file = os.path.join(dest_dir, x[0])
-                base_name = os.path.basename(dest_file)
-                name, ext = os.path.splitext(base_name)
-                name = name + "_" + str(copy_suffix) + str(i)
-                base_name = name + ext
-                dest_file = os.path.join(os.path.dirname(dest_file), base_name)
-                i += 1
-            shutil.copy2(x[1], dest_file)
-        else:
-            os.makedirs(dest_dir)
-            shutil.copy2(x[1], dest_dir)
-"""
