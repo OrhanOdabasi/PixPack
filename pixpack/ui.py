@@ -238,7 +238,13 @@ class Ui_MainWindow(object):
 
     def copyProcess(self):
         # copy button functionality
-        if not photo_dataset and not video_dataset:
+        try:
+            photo_dataset
+            video_dataset
+            datasets_exists = True
+        except:
+            datasets_exists = False
+        if not datasets_exists:
             self.procOut(self.trans["proc_NULL"][self.lang], 0)
         else:
             target_path = self.targetPath.text().strip()
@@ -249,9 +255,9 @@ class Ui_MainWindow(object):
                 # If target path is a word or a phrase
                 # then target path will be in source directory with specified word or phrase
                 target_path = os.path.join(self.srcPath.text(), target_path)
-        copy_suffix = self.trans["copy"][self.lang]
-        t2 = threading.Thread(target=self.thrforCopy, args=(target_path, photo_dataset, video_dataset, copy_suffix))
-        t2.start()
+            copy_suffix = self.trans["copy"][self.lang]
+            t2 = threading.Thread(target=self.thrforCopy, args=(target_path, photo_dataset, video_dataset, copy_suffix))
+            t2.start()
 
     def bttf(self, destination, photodata, videodata, copy_suffix):
         # copy process
