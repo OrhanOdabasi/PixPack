@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # run.py
 # this is entry point of the program.
+# PixPack v2.1 - Organiser
 # Author: Orhan Odabasi (0rh.odabasi[at]gmail.com)
 
 from pixpack import ui

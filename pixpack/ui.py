@@ -241,10 +241,10 @@ class Ui_MainWindow(object):
         try:
             photo_dataset
             video_dataset
-            datasets_exists = True
+            datasets_exist = True
         except:
-            datasets_exists = False
-        if not datasets_exists:
+            datasets_exist = False
+        if not datasets_exist:
             self.procOut(self.trans["proc_NULL"][self.lang], 0)
         else:
             target_path = self.targetPath.text().strip()

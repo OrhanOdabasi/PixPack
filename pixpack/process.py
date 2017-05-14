@@ -48,11 +48,15 @@ def listphotos(path):
             file_size = os.path.getsize(file_path)
 
             try:
+                # date taken [3]
                 date_taken = Image.open(file_path)._getexif()[36867]
                 # year/month/day format required
                 ymd_format = re.match("(\d{4}):(\d{2}):(\d{2})", date_taken)
+                # year taken [4]
                 year = ymd_format.group(1)
+                # month taken [5]
                 month = ymd_format.group(2)
+                # day taken [6]
                 day = ymd_format.group(3)
                 # date info will be our new folder name
                 date_info = "{0}-{1}".format(year, month)
