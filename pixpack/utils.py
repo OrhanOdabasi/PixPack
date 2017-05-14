@@ -22,6 +22,10 @@ def name_existing_photos(dest_directory, dest_file, copy_suffix):
     # rename if the file is existed already, for instance: photo_1
     dest_file_path = os.path.join(dest_directory, dest_file)
     i=1
+    if os.path.exists(dest_file_path):
+        dest_directory = os.path.join(dest_directory, "copies")
+        if not os.path.exists(dest_directory):
+            os.makedirs(dest_directory)            
     while os.path.exists(dest_file_path):
         dest_file_path = os.path.join(dest_directory, dest_file)
         file_name = os.path.basename(dest_file_path)
