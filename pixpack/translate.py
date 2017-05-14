@@ -1,7 +1,7 @@
 # translate.py
 #!/usr/bin/env python3
 # This is a json generator script for translate.json
-# PixPack v2 - Organize your photos safely...
+# PixPack v2.1 - Organize your photos safely...
 # Author: Orhan Odabasi (0rh.odabasi[at]gmail.com)
 
 import json
