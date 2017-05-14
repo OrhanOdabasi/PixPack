@@ -1,9 +1,10 @@
 DEST = /opt/pixpack
 
 help:
-	@printf "make help:					Print help."
-	@printf "make install: 			Install PixPack on you Linux system."
-	@printf "make uninstall:		Uninstall PixPack from your Linux system."
+	@printf "make help:          Print help.\n"
+	@printf "make install:       Install PixPack on you Linux system.\n"
+	@printf "make uninstall:     Uninstall PixPack from your Linux system.\n"
+	@printf "make update:        Sync with GitHub and update PixPack\n"
 
 install:
 	sudo mkdir $(DEST) $(DEST)/img $(DEST)/json $(DEST)/pixpack
@@ -13,8 +14,13 @@ install:
 	sudo install --mode=555 pixpack.py $(DEST)
 	sudo install --mode=555 README.md $(DEST)
 	sudo install --mode=555 PixPack.desktop /usr/share/applications/PixPack.desktop
-	# scripts/instal_dependencies.sh
+	# scripts/install_dependencies.sh not available right now
 
 uninstall:
 	rm -rf $(DEST)
 	rm -f /usr/share/applications/PixPack.desktop
+
+update:
+	sudo make uninstall
+	git pull origin
+	sudo make install
