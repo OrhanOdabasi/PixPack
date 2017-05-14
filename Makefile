@@ -6,14 +6,14 @@ help:
 	@printf "make uninstall:		Uninstall PixPack from your Linux system."
 
 install:
-	mkdir $(DEST) $(DEST)/img $(DEST)/json $(DEST)/pixpack
-	install --mode=555 img/icon.ico $(DEST)/img/icon.ico
-	install --mode=555 json/translate.json $(DEST)/translate.json
-	install --mode=555 pixpack/* $(DEST)/pixpack
-	install --mode=555 pixpack.py $(DEST)
-	install --mode=555 README.md $(DEST)
-	install --mode=555 PixPack.desktop /usr/share/applications/PixPack.desktop
-	scripts/instal_dependencies.sh
+	sudo mkdir $(DEST) $(DEST)/img $(DEST)/json $(DEST)/pixpack
+	sudo install --mode=555 img/icon.ico $(DEST)/img/icon.ico
+	sudo install --mode=555 json/translate.json $(DEST)/json/translate.json
+	sudo install --mode=555 pixpack/* $(DEST)/pixpack
+	sudo install --mode=555 pixpack.py $(DEST)
+	sudo install --mode=555 README.md $(DEST)
+	sudo install --mode=555 PixPack.desktop /usr/share/applications/PixPack.desktop
+	# scripts/instal_dependencies.sh
 
 uninstall:
 	rm -rf $(DEST)
