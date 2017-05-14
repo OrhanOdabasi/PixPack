@@ -5,30 +5,29 @@
 # Author: Orhan Odabasi (0rh.odabasi[at]gmail.com)
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from process import *
+from pixpack import utils
+from pixpack import process
 import json
 import threading
-import os.path
+import os
 import shutil
 
-photo_dataset = []
 
 class Ui_MainWindow(object):
 
     def __init__(self):
-
         # initialize system language variables and translation file
-        self.lang = sysTransVar()
-        with open('translate.json', 'r') as f:
+        # TODO: photo_dataset will be set in __init__ with 'self'
+        self.lang = utils.sys_trans_var()
+        with open('json/translate.json', 'r') as f:
             self.trans = json.load(f)
 
     def setupUi(self, MainWindow):
-
         # MainWindow properties
         MainWindow.setFixedSize(582, 500)
         MainWindow.setWindowTitle(self.trans["title"][self.lang])
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("img/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
@@ -165,9 +164,7 @@ class Ui_MainWindow(object):
         self.fcountOutLabel = QtWidgets.QLabel(self.centralwidget)
         self.fcountOutLabel.setGeometry(QtCore.QRect(300, 290, 80, 20))
 
-
         MainWindow.setCentralWidget(self.centralwidget)
-
 
         # menubar properties
         self.menuBar = QtWidgets.QMenuBar(MainWindow)
@@ -183,50 +180,45 @@ class Ui_MainWindow(object):
         MainWindow.setMenuBar(self.menuBar)
         self.menuBar.addAction(self.aboutMenu)
 
-    def bttnEnable(self):
+        self.all_widgets = [self.targetPath,
+                            self.scanButton,
+                            self.srcPath,
+                            self.csvCheckBox,
+                            self.scanButton,
+                            self.startButton]
 
-        # setting all buttons available
-        self.targetPath.setEnabled(True)
-        self.scanButton.setEnabled(True)
-        self.srcPath.setEnabled(True)
-        self.csvCheckBox.setEnabled(True)
-        self.scanButton.setEnabled(True)
-        self.startButton.setEnabled(True)
+
+    def bttnEnable(self):
+        # set all buttons active
+        for wdgts in self.all_widgets:
+            wdgts.setEnabled(True)
 
     def bttnDisable(self):
-
         # setting all button unavailable
-        self.targetPath.setEnabled(False)
-        self.scanButton.setEnabled(False)
-        self.srcPath.setEnabled(False)
-        self.csvCheckBox.setEnabled(False)
-        self.scanButton.setEnabled(False)
-        self.startButton.setEnabled(False)
+        for wdgts in self.all_widgets:
+            wdgts.setEnabled(False)
 
-    # NOTE: edited
     def thrforScan(self,p):
         # Thread process for scanning
         self.bttnDisable()
         self.procOut(self.trans["proc_scan"][self.lang], 2)
         try:
             global photo_dataset, video_dataset
-            p_count, p_size, folder_count, photo_dataset, video_dataset = scanDir(p)
+            p_count, p_size, folder_count, photo_dataset, video_dataset = process.scanDir(p)
             self.pcountOutLabel.setText(str(p_count))
             self.psizeOutLabel.setText(str(p_size))
             self.fcountOutLabel.setText(str(folder_count))
             self.progressBar.setMaximum(len(photo_dataset)+len(video_dataset))
             self.progressBar.setFormat('%v/{}'.format(self.progressBar.maximum()))
             if self.csvCheckBox.checkState():
-                saveReport(photo_dataset, video_dataset, p)
+                process.saveReport(photo_dataset, video_dataset, p)
                 self.procOut(self.trans["proc_saveTrue"][self.lang], 1)
             else:
                 self.procOut(self.trans["proc_saveFalse"][self.lang], 1)
         except Exception as e:
             self.procOut(self.trans["proc_blankpath"][self.lang], 0)
-            print(e)
         self.bttnEnable()
 
-    # NOTE: edited
     def thrforCopy(self, target_path, photodata, videodata, copy_suffix):
         # Thread process for copying
         self.bttnDisable()
@@ -239,29 +231,27 @@ class Ui_MainWindow(object):
         self.bttnEnable()
 
     def scanProcess(self):
-
-        # scan button connection
+        # scan button functionality
         path = self.srcPath.text()
         t1 = threading.Thread(target=self.thrforScan, args=(path,))
         t1.start()
 
-    # NOTE: edited
     def copyProcess(self):
-        # copy button connection
+        # copy button functionality
         if not photo_dataset and not video_dataset:
             self.procOut(self.trans["proc_NULL"][self.lang], 0)
-            return 0
         else:
-            target_path = self.targetPath.text()
+            target_path = self.targetPath.text().strip()
             if target_path == "":
+                # If target path is not set, target path is set as source path
                 target_path = self.srcPath.text()
             elif not os.path.exists(target_path) and target_path != "":
+                # If target path is a word or a phrase
+                # then target path will be in source directory with specified word or phrase
                 target_path = os.path.join(self.srcPath.text(), target_path)
-
         copy_suffix = self.trans["copy"][self.lang]
         t2 = threading.Thread(target=self.thrforCopy, args=(target_path, photo_dataset, video_dataset, copy_suffix))
         t2.start()
-
 
     def bttf(self, destination, photodata, videodata, copy_suffix):
         # copy process
@@ -270,15 +260,7 @@ class Ui_MainWindow(object):
             dest_dir = os.path.join(destination, str(x[7]))
             if os.path.exists(dest_dir):
                 dest_file = os.path.join(dest_dir, x[0])
-                i = 1
-                while os.path.exists(dest_file):
-                    dest_file = os.path.join(dest_dir, x[0]) # NOTE: This part may be useless
-                    base_name = os.path.basename(dest_file)
-                    name, ext = os.path.splitext(base_name)
-                    name = name + "_" + str(copy_suffix) + str(i)
-                    base_name = name + ext
-                    dest_file = os.path.join(os.path.dirname(dest_file), base_name)
-                    i += 1
+                dest_file = utils.name_existing_photos(dest_dir, dest_file, copy_suffix)
                 shutil.copy2(x[1], dest_file)
             else:
                 os.makedirs(dest_dir)
@@ -290,15 +272,7 @@ class Ui_MainWindow(object):
             dest_dir = os.path.join(destination, "VIDEO")
             if os.path.exists(dest_dir):
                 dest_file = os.path.join(dest_dir, x[0])
-                i = 1
-                while os.path.exists(dest_file):
-                    dest_file = os.path.join(dest_dir, x[0]) # NOTE: This part may be useless
-                    base_name = os.path.basename(dest_file)
-                    name, ext = os.path.splitext(base_name)
-                    name = name + "_" + str(copy_suffix) + str(i)
-                    base_name = name + ext
-                    dest_file = os.path.join(os.path.dirname(dest_file), base_name)
-                    i += 1
+                dest_file = utils.name_existing_photos(dest_dir, dest_file, copy_suffix)
                 shutil.copy2(x[1], dest_file)
             else:
                 os.makedirs(dest_dir)
@@ -307,26 +281,19 @@ class Ui_MainWindow(object):
             self.progressBar.setValue(progress_status)
 
     def procOut(self, text, signal):
-
         # process line configuration
-        # signal 0: Warning
-        # signal 1: Success
-        # signal 2: process
-        if signal == 0:
+        if signal == 0: # warning
             self.procOutLabel.setStyleSheet("color:red;")
             self.procOutLabel.setText(text)
-            return
-        elif signal == 1:
+        elif signal == 1: # success
             self.procOutLabel.setStyleSheet("color:green;")
             self.procOutLabel.setText(text)
-            return
-        elif signal == 2:
+        elif signal == 2: # processing
             self.procOutLabel.setStyleSheet("color:orange;")
             self.procOutLabel.setText(text)
-            return
 
     def aboutMenuWidget(self):
-
+        # about menu
         self.aboutWidget = QtWidgets.QWidget()
         self.aboutWidget.setWindowTitle(self.trans["about_menu"][self.lang])
         self.aboutWidget.setFixedSize(300, 180)

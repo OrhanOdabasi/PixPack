@@ -1,54 +1,37 @@
 #!/usr/bin/env python3
 # process.py
 # This script consists of all core functions.
-# PixPack v2 - Organize your photos safely...
 # Author: Orhan Odabasi (0rh.odabasi[at]gmail.com)
 
 import locale
 import csv
 import os
-import os.path
 from PIL import Image
 import re
 from collections import Counter
 
-# NOTE: edited
-def sysTransVar():
-    # check system language
-    # If system language is English, returns 0
-    # If Turkish, returns 1
-    sys_lang = locale.getlocale()
-    if sys_lang[0] == 'en_EN' or sys_lang[0] == 'en_GB':
-        return 0
-    elif sys_lang[0] == 'tr_TR' or sys_lang[0] is None:
-        return 1
-    else:
-        return 0
 
-# NOTE: edited
 def scanDir(path):
-    # scans the path and collects media data for copy process
+    # scan the path and collect media data for copy process
     while os.path.exists(path) and os.path.isdir(path):
         photos_dataset, totalsize, folder_count, videos_dataset = listphotos(path)
         p_count = len(photos_dataset)
         p_size = "{:.2f} MB".format(float(totalsize/1000000))
         return p_count, p_size, folder_count, photos_dataset, videos_dataset
 
-# NOTE: edited
 def saveReport(photo_datas, video_datas, target_path):
-    # saves summary data to a csv file
+    # save summary data to a csv file
     report_dest_p = os.path.join(target_path, "photo_list.csv")
     report_dest_v = os.path.join(target_path, "video_list.csv")
     with open(report_dest_p, "w") as f:
-        w = csv.writer(f, delimiter=",")
+        w = csv.writer(f, delimiter="\t")
         w.writerows(photo_datas)
         f.close()
     with open(report_dest_v, "w") as f:
-        w = csv.writer(f, delimiter=",")
+        w = csv.writer(f, delimiter="\t")
         w.writerows(video_datas)
         f.close()
 
-# NOTE: edited
 def listphotos(path):
     # Listing all files in target directory
     photos_dataset = []
