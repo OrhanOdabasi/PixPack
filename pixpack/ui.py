@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
 
     def setupUi(self, MainWindow):
         # MainWindow properties
-        MainWindow.setFixedSize(582, 500)
+        MainWindow.setFixedSize(620, 520)
         MainWindow.setWindowTitle(self.trans["title"][self.lang])
         icon = QtGui.QIcon()
         icon_dir = os.path.join(CW_DIR, "img/icon.ico")
@@ -38,7 +38,7 @@ class Ui_MainWindow(object):
 
         # introlabel properties
         self.introLabel = QtWidgets.QLabel(self.centralwidget)
-        self.introLabel.setGeometry(QtCore.QRect(20, 10, 531, 50))
+        self.introLabel.setGeometry(QtCore.QRect(40, 10, 531, 50))
         font = QtGui.QFont()
         font.setPointSize(9)
         font.setBold(True)
@@ -49,23 +49,23 @@ class Ui_MainWindow(object):
 
         # srcpath properties
         self.srcPath = QtWidgets.QLineEdit(self.centralwidget)
-        self.srcPath.setGeometry(QtCore.QRect(190, 110, 360, 25))
+        self.srcPath.setGeometry(QtCore.QRect(220, 115, 360, 25))
 
         # sourcelabel properties
         self.sourceLabel = QtWidgets.QLabel(self.centralwidget)
-        self.sourceLabel.setGeometry(QtCore.QRect(25, 110, 151, 25))
+        self.sourceLabel.setGeometry(QtCore.QRect(25, 115, 181, 25))
         self.sourceLabel.setText(self.trans["path_label"][self.lang])
         self.sourceLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # line properties
         self.line = QtWidgets.QFrame(self.centralwidget)
-        self.line.setGeometry(QtCore.QRect(20, 60, 541, 20))
+        self.line.setGeometry(QtCore.QRect(40, 60, 541, 20))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
 
         # scanlabel properties
         self.scanLabel = QtWidgets.QLabel(self.centralwidget)
-        self.scanLabel.setGeometry(QtCore.QRect(250, 80, 50, 20))
+        self.scanLabel.setGeometry(QtCore.QRect(270, 80, 70, 20))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -76,24 +76,24 @@ class Ui_MainWindow(object):
 
         # csvcheckbox properties
         self.csvCheckBox = QtWidgets.QCheckBox(self.centralwidget)
-        self.csvCheckBox.setGeometry(QtCore.QRect(25, 150, 360, 22))
+        self.csvCheckBox.setGeometry(QtCore.QRect(44, 150, 341, 22))
         self.csvCheckBox.setText(self.trans["save_check"][self.lang])
 
         # scanbutton properties
         self.scanButton = QtWidgets.QPushButton(self.centralwidget)
-        self.scanButton.setGeometry(QtCore.QRect(420, 150, 111, 30))
+        self.scanButton.setGeometry(QtCore.QRect(460, 150, 111, 30))
         self.scanButton.setText(self.trans["scan_bttn"][self.lang])
         self.scanButton.clicked.connect(self.scanProcess)
 
         # pcountlabel properties
         self.pcountLabel = QtWidgets.QLabel(self.centralwidget)
-        self.pcountLabel.setGeometry(QtCore.QRect(110, 230, 161, 20))
+        self.pcountLabel.setGeometry(QtCore.QRect(80, 230, 191, 20))
         self.pcountLabel.setText(self.trans["pcount_label"][self.lang])
         self.pcountLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
 
         # psizelabel properties
         self.psizeLabel = QtWidgets.QLabel(self.centralwidget)
-        self.psizeLabel.setGeometry(QtCore.QRect(110, 260, 161, 20))
+        self.psizeLabel.setGeometry(QtCore.QRect(80, 260, 191, 20))
         self.psizeLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
         self.psizeLabel.setText(self.trans["psize_label"][self.lang])
         self.psizeLabel.setAlignment(QtCore.Qt.AlignRight | QtCore.Qt.AlignTrailing | QtCore.Qt.AlignVCenter)
@@ -106,7 +106,7 @@ class Ui_MainWindow(object):
 
         # statslabel properties
         self.statsLabel = QtWidgets.QLabel(self.centralwidget)
-        self.statsLabel.setGeometry(QtCore.QRect(240, 200, 81, 17))
+        self.statsLabel.setGeometry(QtCore.QRect(260, 196, 91, 21))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -117,29 +117,30 @@ class Ui_MainWindow(object):
 
         # targetlabel properties
         self.targetLabel = QtWidgets.QLabel(self.centralwidget)
-        self.targetLabel.setGeometry(QtCore.QRect(25, 330, 155, 25))
+        self.targetLabel.setGeometry(QtCore.QRect(30, 330, 171, 25))
         self.targetLabel.setText(self.trans["pathout_label"][self.lang])
+        self.targetLabel.setAlignment(QtCore.Qt.AlignCenter)
 
         # targetpath properties
         self.targetPath = QtWidgets.QLineEdit(self.centralwidget)
-        self.targetPath.setGeometry(QtCore.QRect(190, 330, 360, 25))
+        self.targetPath.setGeometry(QtCore.QRect(220, 330, 360, 25))
 
         # progressbar properties
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(380, 430, 171, 25))
+        self.progressBar.setGeometry(QtCore.QRect(410, 430, 171, 25))
         self.progressBar.setValue(0)
         self.progressBar.setMinimum(0)
         self.progressBar.setFormat('%v/{}'.format("-"))
 
         # startbutton properties
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
-        self.startButton.setGeometry(QtCore.QRect(420, 370, 111, 30))
+        self.startButton.setGeometry(QtCore.QRect(460, 370, 111, 30))
         self.startButton.setText(self.trans["start_bttn"][self.lang])
         self.startButton.clicked.connect(self.copyProcess)
 
         # processlabel properties
         self.processLabel = QtWidgets.QLabel(self.centralwidget)
-        self.processLabel.setGeometry(QtCore.QRect(20, 430, 50, 25))
+        self.processLabel.setGeometry(QtCore.QRect(30, 430, 51, 25))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
@@ -148,7 +149,7 @@ class Ui_MainWindow(object):
 
         # procoutlabel properties
         self.procOutLabel = QtWidgets.QLabel(self.centralwidget)
-        self.procOutLabel.setGeometry(QtCore.QRect(71, 430, 281, 25))
+        self.procOutLabel.setGeometry(QtCore.QRect(90, 430, 301, 25))
         font = QtGui.QFont()
         font.setBold(True)
         font.setPixelSize(11)
