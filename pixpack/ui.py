@@ -12,6 +12,7 @@ import threading
 import os
 import shutil
 
+CW_DIR = os.path.dirname(os.path.dirname(__file__)) # main directory
 
 class Ui_MainWindow(object):
 
@@ -19,7 +20,8 @@ class Ui_MainWindow(object):
         # initialize system language variables and translation file
         # TODO: photo_dataset will be set in __init__ with 'self'
         self.lang = utils.sys_trans_var()
-        with open('json/translate.json', 'r') as f:
+        json_dir = os.path.join(CW_DIR, 'json/translate.json')
+        with open(json_dir, 'r') as f:
             self.trans = json.load(f)
 
     def setupUi(self, MainWindow):
@@ -27,7 +29,8 @@ class Ui_MainWindow(object):
         MainWindow.setFixedSize(582, 500)
         MainWindow.setWindowTitle(self.trans["title"][self.lang])
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("img/icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon_dir = os.path.join(CW_DIR, "img/icon.ico")
+        icon.addPixmap(QtGui.QPixmap(icon_dir), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
