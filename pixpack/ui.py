@@ -7,10 +7,12 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 from pixpack import utils
 from pixpack import process
+from pixpack import grouping
 import json
 import threading
 import os
 import shutil
+
 
 CW_DIR = os.path.dirname(os.path.dirname(__file__)) # main directory
 
@@ -266,27 +268,27 @@ class Ui_MainWindow(object):
     def bttf(self, destination, photodata, videodata, copy_suffix):
         # copy process
         progress_status = 0
-        for x in photodata:
-            dest_dir = os.path.join(destination, str(x[7]))
+        for photo in photodata:
+            dest_dir = grouping.group_by_dates(photo[3], destination)
             if os.path.exists(dest_dir):
-                dest_file = os.path.join(dest_dir, x[0])
+                dest_file = os.path.join(dest_dir, photo[0])
                 dest_file = utils.name_existing_photos(dest_dir, dest_file, copy_suffix)
-                shutil.copy2(x[1], dest_file)
+                shutil.copy2(photo[1], dest_file)
             else:
                 os.makedirs(dest_dir)
-                shutil.copy2(x[1], dest_dir)
+                shutil.copy2(photo[1], dest_dir)
             progress_status += 1
             self.progressBar.setValue(progress_status)
 
-        for x in videodata:
+        for photo in videodata:
             dest_dir = os.path.join(destination, "VIDEO")
             if os.path.exists(dest_dir):
-                dest_file = os.path.join(dest_dir, x[0])
+                dest_file = os.path.join(dest_dir, photo[0])
                 dest_file = utils.name_existing_photos(dest_dir, dest_file, copy_suffix)
-                shutil.copy2(x[1], dest_file)
+                shutil.copy2(photo[1], dest_file)
             else:
                 os.makedirs(dest_dir)
-                shutil.copy2(x[1], dest_dir)
+                shutil.copy2(photo[1], dest_dir)
             progress_status += 1
             self.progressBar.setValue(progress_status)
 
