@@ -69,6 +69,29 @@ or pip Python package manager.
 * Pillow 4.1.1
 
 
+#### Installing Dependencies
+
+
+with apt package manager:
+```sh
+sudo apt install python3-pyqt5 python3-pil
+```
+
+with pip Python package manager
+```sh
+pip3 install pyqt5
+pip3 install pilloq
+```
+
+
+## Test Environments
+
+
+tested on: Netrunner 17.03 KDE Plasma, Debian 8.8.0 Gnome, Kali 2017.1 Gnome, Solus OS Budgie
+It will work on pretty much every linux distro except Ubuntu, because fuck you, Ubuntu! Unity sucks!
+
+
+
 #### Copyright
 
 MIT Licence 2017 - Orhan Odabasi
