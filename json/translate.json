@@ -114,5 +114,17 @@
     "title": [
         "PixPack - Organize your photos safely...",
         "PixPack - Fotoğraflarınızı güvenle düzenleyin..."
+    ],
+    "finder_bttn": [
+        "Find...",
+        "Bul..."
+    ],
+    "srcfinder_dialog_title": [
+        "Choose a directory...",
+        "Bir dosya yolu seçin..."
+    ],
+    "targetfinder_dialog_title": [
+        "Choose a output directory...",
+        "Hedef dosya yolunu seçin..."
     ]
 }

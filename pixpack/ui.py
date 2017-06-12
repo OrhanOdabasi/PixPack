@@ -51,7 +51,13 @@ class Ui_MainWindow(object):
 
         # srcpath properties
         self.srcPath = QtWidgets.QLineEdit(self.centralwidget)
-        self.srcPath.setGeometry(QtCore.QRect(220, 115, 360, 25))
+        self.srcPath.setGeometry(QtCore.QRect(220, 115, 300, 25))
+
+        # srcpathfinder properties
+        self.srcPathFinder = QtWidgets.QPushButton(self.centralwidget)
+        self.srcPathFinder.setGeometry(QtCore.QRect(530, 115, 50, 25))
+        self.srcPathFinder.setText(self.trans["finder_bttn"][self.lang])
+        self.srcPathFinder.clicked.connect(self.srcpathFinder)
 
         # sourcelabel properties
         self.sourceLabel = QtWidgets.QLabel(self.centralwidget)
@@ -125,7 +131,13 @@ class Ui_MainWindow(object):
 
         # targetpath properties
         self.targetPath = QtWidgets.QLineEdit(self.centralwidget)
-        self.targetPath.setGeometry(QtCore.QRect(220, 330, 360, 25))
+        self.targetPath.setGeometry(QtCore.QRect(220, 330, 300, 25))
+
+        # targetpathfinder properties
+        self.targetPathFinder = QtWidgets.QPushButton(self.centralwidget)
+        self.targetPathFinder.setGeometry(QtCore.QRect(530, 330, 50, 25))
+        self.targetPathFinder.setText(self.trans["finder_bttn"][self.lang])
+        self.targetPathFinder.clicked.connect(self.targetpathFinder)
 
         # progressbar properties
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
@@ -203,6 +215,18 @@ class Ui_MainWindow(object):
         # setting all button unavailable
         for wdgts in self.all_widgets:
             wdgts.setEnabled(False)
+
+    def srcpathFinder(self):
+        # source directory dialog
+        finder_title = self.trans["srcfinder_dialog_title"][self.lang]
+        target_path = QtWidgets.QFileDialog.getExistingDirectory(self.centralwidget, finder_title, '/home')
+        self.srcPath.setText(target_path)
+
+    def targetpathFinder(self):
+        # target directory dialog
+        finder_title = self.trans["targetfinder_dialog_title"][self.lang]
+        target_path = QtWidgets.QFileDialog.getExistingDirectory(self.centralwidget, finder_title, '/home')
+        self.targetPath.setText(target_path)
 
     def thrforScan(self,p):
         # Thread process for scanning
