@@ -5,7 +5,6 @@
 import re
 import os
 
-
 def group_by_dates(date_meta, destination, pattern='ym'):
     # generate folder name by using basic date informations
     # available patterns: yr=2017, ym=2017-03, ss=summer
@@ -26,12 +25,12 @@ def group_by_dates(date_meta, destination, pattern='ym'):
     elif pattern.lower() == 'ym':
         dest_folder_name = "{year}-{month}".format(year=year, month=month)
     elif pattern.lower() == 'ss':
-        if 1 <= int(month)+1 <= 3:
+        if int(month) in (12, 1, 2):
             dest_folder_name = "Winter"
-        elif 4 <= int(month)+1 <= 6:
+        elif int(month) in (3, 4, 5):
             dest_folder_name = "Spring"
-        elif 7 <= int(month)+1 <= 9:
+        elif int(month) in (6, 7, 8):
             dest_folder_name = "Summer"
-        elif 10 <= int(month)+1 <= 12:
+        elif int(month) in (9, 10, 11):
             dest_folder_name = "Fall"
     return os.path.join(destination, dest_folder_name)
