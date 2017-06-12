@@ -146,6 +146,14 @@ class Ui_MainWindow(object):
         self.progressBar.setMinimum(0)
         self.progressBar.setFormat('%v/{}'.format("-"))
 
+        # combobox properties
+        self.sorting = QtWidgets.QComboBox(self.centralwidget)
+        self.sorting.setGeometry(QtCore.QRect(300, 370, 150, 30))
+        self.sorting_options = ["YYYY (2017)", "YYYY-MM (2017-03)", "SEASON (WINTER)"]
+        for o in self.sorting_options:
+            self.sorting.addItem(o)
+        self.sorting.setCurrentIndex(1)
+
         # startbutton properties
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
         self.startButton.setGeometry(QtCore.QRect(460, 370, 111, 30))
@@ -290,10 +298,19 @@ class Ui_MainWindow(object):
             t2.start()
 
     def bttf(self, destination, photodata, videodata, copy_suffix):
+        # setting grouping algorithms
+        # check out grouping.py for more about sorting options
+        if self.sorting.currentIndex() == 0:
+            pattern = "yr"
+        elif self.sorting.currentIndex() == 1:
+            pattern = "ym"
+        elif self.sorting.currentIndex() == 2:
+            pattern = "ss"
+
         # copy process
         progress_status = 0
         for photo in photodata:
-            dest_dir = grouping.group_by_dates(photo[3], destination)
+            dest_dir = grouping.group_by_dates(photo[3], destination, pattern=pattern)
             if os.path.exists(dest_dir):
                 dest_file = os.path.join(dest_dir, photo[0])
                 dest_file = utils.name_existing_photos(dest_dir, dest_file, copy_suffix)
