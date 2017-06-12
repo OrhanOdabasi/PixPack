@@ -10,6 +10,8 @@ options are limited but it will be developed frequently. Here is some of the fea
 * Scans the specified directory and creates a report file which lists all supported
 images and videos in it.
 * It groups images by their taken dates and copies wherever you would like to.
+* You can group your photos by year (2017), year-month couple (2017-03) or season
+(WINTER) for now. Other sorting algorithms are going to be added soon.
 * It **DOES NOT** erase any of the original files and **DOES NOT** lose metadata within
 copy process.
 * If there is any image or video exists in the target directory, it separates the
