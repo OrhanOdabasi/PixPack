@@ -11,6 +11,8 @@ def group_by_dates(date_meta, destination, pattern='ym'):
     # available patterns: yr=2017, ym=2017-03, ss=summer
     # exif date format -> 2006:03:25 21:34:24
     # return dest_dir
+    if date_meta == "NOT_FOUND":
+        return os.path.join(destination, "NOT_FOUND")
     ymd_format = re.match(r"(\d{4}):(\d{2}):(\d{2}) (\d{2}):(\d{2}):(\d{2})", date_meta)
     year = ymd_format.group(1)
     month = ymd_format.group(2)
