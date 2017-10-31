@@ -7,9 +7,9 @@ help:
 	@printf "make update:        Sync with GitHub and update PixPack\n"
 
 install:
-	sudo mkdir $(DEST) $(DEST)/img $(DEST)/json $(DEST)/pixpack $(dest)/ini
+	sudo mkdir $(DEST) $(DEST)/img $(DEST)/json $(DEST)/pixpack $(DEST)/ini
 	sudo install --mode=555 img/icon.ico $(DEST)/img/icon.ico
-	sudo install --mode=555 ini/* $(dest)/ini
+	sudo install --mode=555 ini/* $(DEST)/ini
 	sudo install --mode=555 json/translate.json $(DEST)/json/translate.json
 	sudo install --mode=555 pixpack/* $(DEST)/pixpack
 	sudo install --mode=555 pixpack.py $(DEST)
