@@ -148,7 +148,7 @@ class Ui_MainWindow(object):
 
         # combobox properties
         self.sorting = QtWidgets.QComboBox(self.centralwidget)
-        self.sorting.setGeometry(QtCore.QRect(300, 370, 150, 30))
+        self.sorting.setGeometry(QtCore.QRect(250, 370, 200, 30))
         self.sorting_options = ["YYYY (2017)", "YYYY-MM (2017-03)", "SEASON (WINTER)"]
         for o in self.sorting_options:
             self.sorting.addItem(o)

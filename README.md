@@ -2,7 +2,7 @@
 
 ![PixPack Showcase](https://1.bp.blogspot.com/-orCPq1IU72Y/WRiELaHW9_I/AAAAAAAAOd0/VW9kEhVOvmk8jQnFsz14LFrIIuTHbEpbQCLcB/s1600/pixpackv2.png)
 
-PixPack is an photo organiser application which is designed with Qt Designer 4
+PixPack is a photo organiser application which is designed with Qt Designer 4
 and written in Python and is available on Linux based operating systems. For now,
 options are limited but it will be developed frequently. Here is some of the features:
 
@@ -82,14 +82,14 @@ sudo apt install python3-pyqt5 python3-pil
 with pip Python package manager
 ```sh
 pip3 install pyqt5
-pip3 install pilloq
+pip3 install pillow
 ```
 
 
 ## Test Environments
 
 
-tested on: Netrunner 17.03 KDE Plasma, Debian 8.8.0 Gnome, Kali 2017.1 Gnome, Solus OS Budgie
+tested on: Netrunner 17.03 KDE Plasma, Debian 9.4.0 Gnome, Kali 2017.1 Gnome, Solus OS Budgie
 It will work on pretty much every linux distro except Ubuntu, because fuck you, Ubuntu! Unity sucks!
 
 
