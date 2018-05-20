@@ -68,7 +68,7 @@ def listphotos(path):
                 # destination folder name [7]
                 date_info = "NOT_FOUND"
 
-            if name.lower().endswith((".jpeg", ".jpg", ".png")):
+            if name.lower().endswith((".jpeg", ".jpg", ".png", ".dng")):
                 p_data_list.extend([file_name, file_path, file_size, date_taken, year, month, day, date_info])
                 photos_dataset.append(p_data_list)
             elif name.lower().endswith((".mov", ".mkv", ".mp4", ".3gp", ".wmv", ".avi")):
