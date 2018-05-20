@@ -211,7 +211,10 @@ class Ui_MainWindow(object):
                             self.srcPath,
                             self.csvCheckBox,
                             self.scanButton,
-                            self.startButton]
+                            self.startButton,
+                            self.srcPathFinder,
+                            self.targetPathFinder,
+                            self.sorting,]
 
 
     def bttnEnable(self):
