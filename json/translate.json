@@ -126,5 +126,13 @@
     "targetfinder_dialog_title": [
         "Choose a output directory...",
         "Hedef dosya yolunu seçin..."
+    ],
+    "version": [
+        "Version: ",
+        "Sürüm: "
+    ],
+    "versionCodeName": [
+        "Version Code Name: ",
+        "Versiyon Adı: "
     ]
 }

@@ -12,9 +12,12 @@ import json
 import threading
 import os
 import shutil
-
+import configparser
 
 CW_DIR = os.path.dirname(os.path.dirname(__file__)) # main directory
+# variable loaders
+glob_vars = configparser.ConfigParser()
+glob_vars.read("ini/vars.ini")
 
 class Ui_MainWindow(object):
 
@@ -352,7 +355,7 @@ class Ui_MainWindow(object):
         # about menu
         self.aboutWidget = QtWidgets.QWidget()
         self.aboutWidget.setWindowTitle(self.trans["about_menu"][self.lang])
-        self.aboutWidget.setFixedSize(300, 180)
+        self.aboutWidget.setFixedSize(300, 220)
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("icon.ico"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.aboutWidget.setWindowIcon(icon)
@@ -381,7 +384,17 @@ class Ui_MainWindow(object):
         self.label4.setAlignment(QtCore.Qt.AlignCenter)
         self.label4.setText(self.trans["prog_lang"][self.lang])
 
-        z = [self.label, self.label2, self.label3, self.label4]
+        self.label5 = QtWidgets.QLabel(self.aboutWidget)
+        self.label5.setGeometry(QtCore.QRect(13, 150, 270, 25))
+        self.label5.setAlignment(QtCore.Qt.AlignCenter)
+        self.label5.setText(self.trans["version"][self.lang] + glob_vars["version"]["version"])
+
+        self.label6 = QtWidgets.QLabel(self.aboutWidget)
+        self.label6.setGeometry(QtCore.QRect(13, 180, 270, 25))
+        self.label6.setAlignment(QtCore.Qt.AlignCenter)
+        self.label6.setText(self.trans["versionCodeName"][self.lang] + glob_vars["version"]["versionCodeName"])
+
+        z = [self.label5, self.label6]
 
         for x in z:
             x.setFont(fontAbout)
