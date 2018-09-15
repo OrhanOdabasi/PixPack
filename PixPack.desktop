@@ -1,6 +1,6 @@
 [Desktop Entry]
 Encoding=UTF-8
-Version=2.1
+Version=1.1
 Name=PixPack
 GenericName=PixPack Photo Organiser
 Exec=/opt/pixpack/pixpack.py

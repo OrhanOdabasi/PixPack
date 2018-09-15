@@ -16,7 +16,7 @@ install:
 	sudo install --mode=555 README.md $(DEST)
 	sudo install --mode=555 PixPack.desktop /usr/share/applications/PixPack.desktop
 	# scripts/install_dependencies.sh not available right now
-
+	echo "Pixpack is successfully installed!"
 uninstall:
 	rm -rf $(DEST)
 	rm -f /usr/share/applications/PixPack.desktop

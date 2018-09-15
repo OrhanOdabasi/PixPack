@@ -12,12 +12,10 @@ import json
 import threading
 import os
 import shutil
-import configparser
+
 
 CW_DIR = os.path.dirname(os.path.dirname(__file__)) # main directory
-# variable loaders
-glob_vars = configparser.ConfigParser()
-glob_vars.read("ini/vars.ini")
+
 
 class Ui_MainWindow(object):
 
@@ -387,12 +385,12 @@ class Ui_MainWindow(object):
         self.label5 = QtWidgets.QLabel(self.aboutWidget)
         self.label5.setGeometry(QtCore.QRect(13, 150, 270, 25))
         self.label5.setAlignment(QtCore.Qt.AlignCenter)
-        self.label5.setText(self.trans["version"][self.lang] + glob_vars["version"]["version"])
+        self.label5.setText(self.trans["version"][self.lang] + utils.versioncontrol()[0])
 
         self.label6 = QtWidgets.QLabel(self.aboutWidget)
         self.label6.setGeometry(QtCore.QRect(13, 180, 270, 25))
         self.label6.setAlignment(QtCore.Qt.AlignCenter)
-        self.label6.setText(self.trans["versionCodeName"][self.lang] + glob_vars["version"]["versionCodeName"])
+        self.label6.setText(self.trans["versionCodeName"][self.lang] + utils.versioncontrol()[1])
 
         z = [self.label5, self.label6]
 
